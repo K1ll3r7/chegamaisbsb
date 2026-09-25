@@ -44,18 +44,41 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Cabeçalhos de segurança aplicados a todas as respostas do servidor.
+// Não definimos frame-ancestors/X-Frame-Options para não quebrar o preview do Lovable,
+// e não restringimos script-src/style-src/img-src porque o site carrega fontes e
+// imagens de origens externas (Google Fonts, Fontshare, Drive, links da planilha).
+const SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
+  "Strict-Transport-Security": "max-age=15552000",
+  "Content-Security-Policy": "object-src 'none'; base-uri 'self'; form-action 'self'",
+};
+
+function withSecurityHeaders(response: Response): Response {
+  // Respostas de fetch() podem ter headers imutáveis, então copiamos antes de alterar.
+  const secured = new Response(response.body, response);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    secured.headers.set(name, value);
+  }
+  return secured;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return withSecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };
