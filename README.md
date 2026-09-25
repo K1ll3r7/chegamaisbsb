@@ -29,15 +29,37 @@ Ao adicionar uma nova linha na planilha:
 - Uma página individual é criada automaticamente
 - Os links de inscrição e localização são atualizados
 
-Nenhuma alteração de código é necessária.
+Nenhuma alteração de código é necessária. A planilha é lida pelo servidor e fica em cache por até 1 minuto, então uma alteração pode levar cerca de 1 minuto para aparecer no site.
+
+### Colunas da planilha
+
+| Coluna | Como preencher |
+| --- | --- |
+| `publicar` | (opcional) `SIM` para aparecer no site. Se a coluna existir, linhas sem `SIM` ficam ocultas, o que serve como rascunho. Se a coluna não existir, todas as linhas aparecem. |
+| `slug` | Identificador único do evento na URL, em minúsculas e sem espaços (ex: `cafe-e-pintura`). Linhas com `slug` vazio ou repetido são ignoradas. |
+| `featured` | `TRUE` para destacar o evento. |
+| `status` | `aberto` ou `encerrado`. Qualquer outro valor é tratado como `encerrado`. |
+| `title`, `category`, `time`, `location` | Texto livre. |
+| `date` | Formato `DD/MM/AAAA`. Eventos com data anterior a hoje são encerrados e escondidos das listas automaticamente. |
+| `mapsUrl`, `formUrl` | Links começando com `https://`. Outros valores são ignorados. Sem `formUrl`, o botão mostra "Inscrições em breve". |
+| `image` | Nome de um arquivo em `public/imagens` (ex: `brenda.jpg`), ou link `https://` da imagem, ou link de arquivo do Google Drive compartilhado como "qualquer pessoa com o link". Sem imagem, usa um placeholder. |
+| `shortDescription`, `description` | Texto exibido nos cards e na página do evento. |
+| `spots` | Número de vagas (ex: `20` aparece como "20 vagas") ou texto livre. |
+
+### Segurança
+
+- Só links `https://` são aceitos nos campos de link e imagem.
+- Restrinja quem pode **editar** a planilha, e deixe o resto como leitor.
+- Nenhuma chave secreta é usada. O projeto não tem variáveis de ambiente obrigatórias.
 
 ## Tecnologias utilizadas
 
-- React
-- TypeScript
+- React 19 e TypeScript
+- TanStack Start / TanStack Router (renderização no servidor)
 - Vite
 - Tailwind CSS
 - Shadcn UI
+- Framer Motion
 - Google Sheets (CMS)
 - Google Forms
 
@@ -45,12 +67,15 @@ Nenhuma alteração de código é necessária.
 
 ```bash
 src/
-├── components/
-├── pages/
-├── services/
+├── components/     # layout (Navbar) e componentes de UI (shadcn)
+├── routes/         # páginas: / , /experiencias e /experiencias/$slug
+├── services/       # eventsService.ts: leitura, validação e cache da planilha
 ├── hooks/
-├── integrations/
-└── utils/
+├── lib/            # utilitários e páginas de erro
+├── server.ts       # entrada do servidor (cabeçalhos de segurança, tratamento de erros)
+└── start.ts        # middlewares do TanStack Start
+public/
+└── imagens/        # fotos usadas no site e na coluna `image` da planilha
 ```
 
 ## Desenvolvimento local
