@@ -39,6 +39,11 @@ function Experiencias() {
 
       {/* Grid */}
       <section className="pb-32 px-8">
+        {activeEvents.length === 0 && (
+          <p className="max-w-2xl mx-auto text-center text-xl text-[#5E5E5E] font-serif italic py-12">
+            Ainda não temos próximas experiências marcadas. Volte em breve, novidades vêm aí. 💜
+          </p>
+        )}
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
           {activeEvents.map((e, i) => (
             <motion.div 
@@ -51,7 +56,7 @@ function Experiencias() {
               className="bg-white rounded-[2.5rem] overflow-hidden group shadow-sm hover:shadow-2xl transition-all border border-black/5"
             >
               <div className="h-72 overflow-hidden relative">
-                <img src={e.image} alt={e.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <img src={e.image} alt={e.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-6 left-6 flex gap-2">
                   <div className="px-4 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold uppercase text-[#7A3FF2] tracking-widest">{e.category}</div>
                   {e.featured && (

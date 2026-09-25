@@ -47,6 +47,9 @@ function ExperienciaIndividual() {
   }
 
   const registrationEnabled = event.status === 'aberto' && !!event.formUrl;
+  // Evento aberto mas sem link de inscrição na planilha ainda: não mostrar como "encerrado"
+  const closedLabel = event.status === 'aberto' ? 'Inscrições em breve' : 'Inscrições Encerradas';
+  const spotsLabel = /^\d+$/.test(event.spots) ? `${event.spots} ${event.spots === '1' ? 'vaga' : 'vagas'}` : event.spots;
 
   const handleRegister = () => {
     if (!registrationEnabled) return;
@@ -61,7 +64,7 @@ function ExperienciaIndividual() {
       <section className="pt-32 pb-20 px-8">
         <div className="max-w-5xl mx-auto">
           <div className="relative h-[50vh] rounded-[3rem] overflow-hidden mb-12 shadow-2xl">
-            <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+            <img src={event.image} alt={event.title} fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/20" />
           </div>
           
@@ -95,7 +98,7 @@ function ExperienciaIndividual() {
                   : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
               }`}
             >
-              {registrationEnabled ? "Participar" : "Inscrições Encerradas"}
+              {registrationEnabled ? "Participar" : closedLabel}
             </button>
           </div>
 
@@ -106,7 +109,7 @@ function ExperienciaIndividual() {
             {event.spots && (
               <div className="bg-white p-12 rounded-[2.5rem] border border-black/5 mb-20">
                 <h3 className="text-2xl font-serif font-bold mb-8 italic">Vagas</h3>
-                <p className="text-[#1A1A1A] text-lg">{event.spots}</p>
+                <p className="text-[#1A1A1A] text-lg">{spotsLabel}</p>
               </div>
             )}
           </div>
@@ -118,7 +121,7 @@ function ExperienciaIndividual() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-serif font-bold mb-12 text-center tracking-tight">Experiência Chega Mais</h2>
           <div className="max-w-4xl mx-auto h-[60vh] rounded-[3rem] overflow-hidden shadow-2xl">
-             <img src={event.image} alt="Destaque" className="w-full h-full object-cover" />
+             <img src={event.image} alt="" aria-hidden="true" loading="lazy" decoding="async" className="w-full h-full object-cover" />
           </div>
         </div>
       </section>
@@ -138,7 +141,7 @@ function ExperienciaIndividual() {
                 : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
             }`}
           >
-            {registrationEnabled ? "Quero Participar" : "Inscrições Encerradas"}
+            {registrationEnabled ? "Quero Participar" : closedLabel}
           </button>
         </div>
       </section>
