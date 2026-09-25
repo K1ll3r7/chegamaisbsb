@@ -1,7 +1,7 @@
 import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
-import { getEvents, type SheetEvent as Event } from "@/services/eventsService";
+import { getUpcomingEvents, type SheetEvent as Event } from "@/services/eventsService";
 
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -17,16 +17,13 @@ export const Route = createFileRoute("/experiencias/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getUpcomingEvents(),
   component: Experiencias,
 });
 
 
 function Experiencias() {
-  const [activeEvents, setActiveEvents] = React.useState<Event[]>([]);
-
-  React.useEffect(() => {
-    getEvents().then(setActiveEvents);
-  }, []);
+  const activeEvents: Event[] = Route.useLoaderData();
 
   return (
     <div className="min-h-screen bg-[#FAF9F8] text-[#1A1A1A] font-sans">
@@ -72,7 +69,7 @@ function Experiencias() {
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-bold text-[#5E5E5E]">{e.status === 'aberto' ? "Inscrições Abertas" : "Encerrado"}</span>
                   <Link 
-                    to={`/experiencias/${e.slug}`} 
+                    to="/experiencias/$slug" params={{ slug: e.slug }} 
                     className="flex items-center gap-2 px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] transition-all"
                   >
                     Ver experiência <ArrowRight size={16} />

@@ -1,5 +1,4 @@
-import React from "react";
-import { createFileRoute, useParams, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
 import { getEventBySlug, type SheetEvent as Event } from "@/services/eventsService";
 import { Calendar, MapPin, Check, Camera, ArrowRight, Sparkles, HelpCircle, ChevronDown } from "lucide-react";
@@ -7,32 +6,31 @@ import { Calendar, MapPin, Check, Camera, ArrowRight, Sparkles, HelpCircle, Chev
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/experiencias/$slug")({
-  head: () => ({
-    meta: [{ title: 'Experiência | Chega Mais BSB' }],
-  }),
+  loader: async ({ params }) => ({ event: (await getEventBySlug(params.slug)) ?? null }),
+  head: ({ loaderData }) => {
+    const event = loaderData?.event;
+    if (!event) return { meta: [{ title: "Experiência | Chega Mais BSB" }] };
+    const title = `${event.title} | Chega Mais BSB`;
+    const description = event.shortDescription || event.description;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        ...(event.image.startsWith("https://") ? [{ property: "og:image", content: event.image }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: ExperienciaIndividual,
 });
 
 
 function ExperienciaIndividual() {
-  const { slug } = useParams({ from: "/experiencias/$slug" });
-  const [event, setEvent] = React.useState<Event | undefined>(undefined);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    getEventBySlug(slug).then(res => {
-      setEvent(res);
-      setLoading(false);
-    });
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#FAF9F8] flex items-center justify-center">
-        <div className="animate-pulse text-[#7A3FF2] font-serif text-2xl">Carregando...</div>
-      </div>
-    );
-  }
+  const { event: loaded } = Route.useLoaderData();
+  const event: Event | undefined = loaded ?? undefined;
 
   if (!event) {
     return (
@@ -52,7 +50,7 @@ function ExperienciaIndividual() {
 
   const handleRegister = () => {
     if (!registrationEnabled) return;
-    window.open(event.formUrl, '_blank');
+    window.open(event.formUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (

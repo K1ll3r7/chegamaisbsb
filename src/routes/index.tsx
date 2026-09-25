@@ -18,17 +18,14 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getActiveEvents(),
   component: Index,
 });
 
 
 
 function Index() {
-  const [activeEvents, setActiveEvents] = React.useState<Event[]>([]);
-
-  React.useEffect(() => {
-    getActiveEvents().then(setActiveEvents);
-  }, []);
+  const activeEvents: Event[] = Route.useLoaderData();
   const { scrollYProgress } = useScroll();
 
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -246,7 +243,7 @@ function Index() {
                     <span className="text-sm font-bold text-[#5E5E5E]">
                       {e.status === 'aberto' ? "Participar" : "Inscrições Encerradas"}
                     </span>
-                    <Link to={`/experiencias/${e.slug}`} className="px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] transition-all">
+                    <Link to="/experiencias/$slug" params={{ slug: e.slug }} className="px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] transition-all">
                       {e.status === 'aberto' ? "Participar" : "Ver Detalhes"}
                     </Link>
                   </div>
