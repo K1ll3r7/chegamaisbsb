@@ -1,12 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
-import { getEventBySlug, type SheetEvent as Event } from "@/services/eventsService";
+import { getEventBySlug, getUpcomingEvents, type SheetEvent as Event } from "@/services/eventsService";
 import { Calendar, MapPin, Check, Camera, ArrowRight, Sparkles, HelpCircle, ChevronDown } from "lucide-react";
 
 import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/experiencias/$slug")({
-  loader: async ({ params }) => ({ event: (await getEventBySlug(params.slug)) ?? null }),
+  loader: async ({ params }) => {
+    const event = (await getEventBySlug(params.slug)) ?? null;
+    const others = event
+      ? (await getUpcomingEvents()).filter((e) => e.slug !== params.slug).slice(0, 3)
+      : [];
+    return { event, others };
+  },
   head: ({ loaderData }) => {
     const event = loaderData?.event;
     if (!event) return { meta: [{ title: "Experiência | Chega Mais BSB" }] };
@@ -29,7 +35,7 @@ export const Route = createFileRoute("/experiencias/$slug")({
 
 
 function ExperienciaIndividual() {
-  const { event: loaded } = Route.useLoaderData();
+  const { event: loaded, others } = Route.useLoaderData();
   const event: Event | undefined = loaded ?? undefined;
 
   if (!event) {
@@ -143,6 +149,42 @@ function ExperienciaIndividual() {
         </div>
       </section>
 
+
+      {/* Outras experiências */}
+      {others.length > 0 && (
+        <section className="py-24 px-8 bg-[#FAF9F8]">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-serif font-bold mb-12 text-center tracking-tight">Você também pode gostar</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {others.map((o, i) => (
+                <motion.div
+                  key={o.slug}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+                >
+                  <Link
+                    to="/experiencias/$slug"
+                    params={{ slug: o.slug }}
+                    className="block bg-white rounded-[2rem] overflow-hidden group shadow-sm hover:shadow-xl transition-all border border-black/5"
+                  >
+                    <div className="h-48 overflow-hidden relative">
+                      <img src={o.image} alt={o.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold uppercase text-[#7A3FF2] tracking-widest">{o.category}</div>
+                    </div>
+                    <div className="p-6">
+                      <span className="flex items-center gap-1 text-xs font-bold text-[#5E5E5E] mb-3 uppercase tracking-widest"><Calendar size={12} /> {o.date}</span>
+                      <h3 className="text-xl font-serif font-bold mb-3">{o.title}</h3>
+                      <span className="flex items-center gap-1 text-sm font-bold text-[#7A3FF2] group-hover:gap-2 transition-all">Ver experiência <ArrowRight size={14} /></span>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Final */}
       <motion.section
