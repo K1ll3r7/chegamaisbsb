@@ -1,6 +1,6 @@
 # Chega Mais BSB: onde paramos e o que falta
 
-Documento de passagem de bastão, escrito em 25/09/2026 e atualizado em 28/09/2026. Serve para você e para o Claude retomarem de outro computador sem perder contexto.
+Documento de passagem de bastão, escrito em 25/09/2026 e atualizado em 28/09/2026 (duas vezes). Serve para você e para o Claude retomarem de outro computador sem perder contexto.
 
 > **Para o Claude que vai ler isto:** leia o documento inteiro antes de mexer em qualquer coisa. Confira o estado real com `git status` e `git log --oneline -6`, porque este texto pode estar desatualizado.
 
@@ -95,15 +95,20 @@ Arquivo principal: `src/services/eventsService.ts`.
   - Navbar em mobile: esconde os links de texto, mantém logo + botão "Participar", sem estourar.
 - Isso fecha os antigos itens C.1 e C.2 (renumerados abaixo).
 
+### 28/09 (mais tarde): planilha editada de verdade (via Claude in Chrome + o próprio Max)
+- **Linhas de teste apagadas** (`evento-max`/"Max Kart" e `babymetal`/"Show das Meninas"). Restam só os 5 eventos reais, linhas 2–6.
+- **Coluna `publicar` criada** (coluna O), com `SIM` nas 5 linhas e menu suspenso (`SIM`/`NÃO`) por validação de dados. O código já sabe usá-la (Fase 0).
+- **Validação de `status`, `featured` e `category` já existia** na planilha (alguém tinha feito antes) — nada a fazer aí.
+- **Validação "só `https`" criada** em `mapsUrl`/`formUrl`/`image` (I2:K200), com aviso visual (triângulo vermelho) nas células inválidas. Confirmado funcionando: as 5 linhas com `[link removed]` mostram o aviso.
+- **Achado importante para qualquer fórmula futura nesta planilha:** ela está no idioma **Português (Brasil)**, então o separador de argumentos em fórmulas é `;` (ponto e vírgula), não `,` (vírgula) — a vírgula é o separador decimal nesse idioma. Uma fórmula como `=OR(ISBLANK(I2),REGEXMATCH(...))` dá "Fórmula inválida" nessa planilha; o certo é `=OR(ISBLANK(I2);REGEXMATCH(...))`. Isso custou várias tentativas erradas (chegamos a suspeitar de aspas curvas e de auto-link do Sheets para "https://" — nenhuma das duas era a causa real). A fórmula final, para referência, está em `Dados > Validação de dados` no intervalo `I2:K200`.
+- Restam da lista A original: item 1 (preencher os links reais — só o Max tem essa informação) e item 5 (restringir quem edita — decisão do Max). Itens 3 e 4 (renumerados) estão feitos.
+
 ## 4. O que falta fazer
 
 ### A. Você precisa fazer (Google Sheets)
-1. **Preencher os links das linhas de exemplo.** As 5 primeiras linhas (Cerâmica, Café & Pintura, Clube do Livro, Trilha, Degustação) têm `mapsUrl`, `formUrl` e `image` inválidos (texto `[link removed]` ou vazio). Sem `formUrl`, ninguém consegue se inscrever, e sem `image` aparece o placeholder.
-2. **Apagar ou ocultar as linhas de teste:** `evento-max` ("Max Kart", "Teste do Max") e `babymetal` ("Show das Meninas", "Minha casa"). A data delas já passou, então hoje ficam escondidas, mas continuam na planilha.
-3. **Validação na planilha:** menu suspenso para `status` (`aberto`/`encerrado`) e `category`; caixa de seleção para `featured`; data em formato fixo; regra que só aceita links `https`.
-4. **Criar a coluna `publicar`** com menu suspenso `SIM`/`NÃO`. Depois de criada, só o que estiver `SIM` aparece no site. É o mecanismo de rascunho e aprovação.
-5. **Restringir quem edita:** só quem cadastra tem permissão de edição, todos os outros ficam como leitor. Ligar o histórico de versões.
-6. (Opcional) Um **Google Forms** que alimenta uma aba de rascunhos, para as meninas cadastrarem por formulário. Alguém revisa e copia para a aba pública.
+1. **Preencher os links das linhas de exemplo.** As 5 linhas reais (Cerâmica, Café & Pintura, Clube do Livro, Trilha, Degustação) têm `mapsUrl`, `formUrl` e `image` inválidos (texto `[link removed]` ou vazio) — agora aparecem com um triângulo vermelho de aviso na célula, o que ajuda a não esquecer. Sem `formUrl`, ninguém consegue se inscrever, e sem `image` aparece o placeholder.
+2. **Restringir quem edita:** só quem cadastra tem permissão de edição, todos os outros ficam como leitor. Ligar o histórico de versões.
+3. (Opcional) Um **Google Forms** que alimenta uma aba de rascunhos, para as meninas cadastrarem por formulário. Alguém revisa e copia para a aba pública (usando a coluna `publicar` para controlar o que já foi revisado).
 
 ### B. Depende de você decidir
 1. **Publicar as mudanças:** o build e a conferência visual já foram feitos (seção 3). Se você concordar com o resultado, é só avisar que eu faço o merge de `melhorias-seguranca-usabilidade` no `main` — isso publica pelo Lovable.
