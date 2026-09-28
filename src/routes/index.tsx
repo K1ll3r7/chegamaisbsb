@@ -45,7 +45,7 @@ function Index() {
       <Navbar />
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-[#7A3FF2] origin-left z-[60]" style={{ scaleX }} />
 
-      
+      <main id="conteudo">
       {/* Hero */}
       <section className="relative h-screen w-full flex flex-col justify-center items-center px-4 overflow-hidden">
         <motion.div initial={{ scale: 1.1 }} animate={{ scale: 1 }} transition={{ duration: 2 }} className="absolute inset-0 z-0">
@@ -284,6 +284,7 @@ function Index() {
           </div>
         </motion.div>
       </section>
+      </main>
 
       <footer className="py-20 bg-[#FAF9F8] text-center border-t border-black/5">
         <div className="flex items-center justify-center gap-2 mb-6">

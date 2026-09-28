@@ -36,12 +36,12 @@ function ExperienciaIndividual() {
     return (
       <div className="min-h-screen bg-[#FAF9F8] text-[#1A1A1A] font-sans">
         <Navbar />
-        <div className="pt-40 pb-20 px-8 text-center">
+        <main id="conteudo" className="pt-40 pb-20 px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6">Experiência não encontrada</h1>
           <Link to="/experiencias" className="text-[#7A3FF2] font-bold hover:underline">
             Voltar para experiências
           </Link>
-        </div>
+        </main>
       </div>
     );
   }
@@ -59,7 +59,8 @@ function ExperienciaIndividual() {
   return (
     <div className="min-h-screen bg-[#FAF9F8] text-[#1A1A1A] font-sans">
       <Navbar />
-      
+
+      <main id="conteudo">
       {/* Hero */}
       <section className="pt-32 pb-20 px-8">
         <div className="max-w-5xl mx-auto">
@@ -145,6 +146,7 @@ function ExperienciaIndividual() {
           </button>
         </div>
       </section>
+      </main>
     </div>
   );
 }

@@ -45,15 +45,37 @@ function isH3SwallowedErrorBody(body: string): boolean {
 }
 
 // Cabeçalhos de segurança aplicados a todas as respostas do servidor.
-// Não definimos frame-ancestors/X-Frame-Options para não quebrar o preview do Lovable,
-// e não restringimos script-src/style-src/img-src porque o site carrega fontes e
-// imagens de origens externas (Google Fonts, Fontshare, Drive, links da planilha).
+// Não definimos frame-ancestors/X-Frame-Options para não quebrar o preview do Lovable.
+//
+// CSP: testada de verdade no navegador contra o build de produção antes de ir para o
+// código. O TanStack Start injeta 2 <script> inline no HTML (restauração de scroll e
+// o bootstrap de hidratação, que embute os dados da rota — por isso o conteúdo muda a
+// cada página e não dá para travar por hash fixo). Essa versão não suporta nonce, então
+// 'unsafe-inline' é necessário em script-src. O risco fica baixo porque o React escapa
+// todo conteúdo vindo da planilha; não há HTML bruto de terceiros renderizado no site.
+// O Framer Motion anima via atributo style="" inline (~24 elementos), daí o mesmo em
+// style-src.
+// - style-src/font-src liberam só os hosts reais usados (Google Fonts e Fontshare,
+//   confirmados lendo o CSS deles: fonts.gstatic.com e cdn.fontshare.com).
+// - img-src libera qualquer https, porque a planilha aceita imagem de qualquer link
+//   https (Drive, ou qualquer outra origem que alguém cole na coluna "image").
+const CSP =
+  "default-src 'self'; " +
+  "script-src 'self' 'unsafe-inline'; " +
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com; " +
+  "font-src 'self' https://fonts.gstatic.com https://cdn.fontshare.com; " +
+  "img-src 'self' https: data:; " +
+  "connect-src 'self'; " +
+  "object-src 'none'; " +
+  "base-uri 'self'; " +
+  "form-action 'self'";
+
 const SECURITY_HEADERS: Record<string, string> = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
   "Strict-Transport-Security": "max-age=15552000",
-  "Content-Security-Policy": "object-src 'none'; base-uri 'self'; form-action 'self'",
+  "Content-Security-Policy": CSP,
 };
 
 function withSecurityHeaders(response: Response): Response {

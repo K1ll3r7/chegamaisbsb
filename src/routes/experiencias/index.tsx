@@ -28,7 +28,8 @@ function Experiencias() {
   return (
     <div className="min-h-screen bg-[#FAF9F8] text-[#1A1A1A] font-sans">
       <Navbar />
-      
+
+      <main id="conteudo">
       {/* Hero */}
       <section className="pt-40 pb-20 px-8 text-center">
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-serif font-bold mb-6 tracking-tight">Próximas Experiências</motion.h1>
@@ -85,6 +86,7 @@ function Experiencias() {
           ))}
         </div>
       </section>
+      </main>
     </div>
   );
 }
