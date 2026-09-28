@@ -61,14 +61,24 @@ function ExperienciaIndividual() {
       <Navbar />
 
       <main id="conteudo">
-      {/* Hero */}
-      <section className="pt-32 pb-20 px-8">
+      {/* Hero — a foto e o cabeçalho entram em uma sequência única */}
+      <motion.section
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="pt-32 pb-20 px-8"
+      >
         <div className="max-w-5xl mx-auto">
-          <div className="relative h-[50vh] rounded-[3rem] overflow-hidden mb-12 shadow-2xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 1.03 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="relative h-[50vh] rounded-[3rem] overflow-hidden mb-12 shadow-2xl"
+          >
             <img src={event.image} alt={event.title} fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/20" />
-          </div>
-          
+          </motion.div>
+
           <div className="flex flex-col md:flex-row justify-between md:items-end mb-12">
             <div>
               <h1 className="text-5xl md:text-7xl font-serif font-bold mb-4 tracking-tight">{event.title}</h1>
@@ -94,8 +104,8 @@ function ExperienciaIndividual() {
               onClick={handleRegister}
               disabled={!registrationEnabled}
               className={`mt-8 md:mt-0 px-10 py-5 rounded-full font-bold text-lg transition-all shadow-xl ${
-                registrationEnabled 
-                  ? "bg-[#7A3FF2] text-white hover:bg-[#5E2CCF]" 
+                registrationEnabled
+                  ? "bg-[#7A3FF2] text-white hover:bg-[#5E2CCF] active:scale-[0.97]"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
               }`}
             >
@@ -115,37 +125,49 @@ function ExperienciaIndividual() {
             )}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Galeria - Cinematic Highlight from Sheets */}
       <section className="py-20 px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-serif font-bold mb-12 text-center tracking-tight">Experiência Chega Mais</h2>
-          <div className="max-w-4xl mx-auto h-[60vh] rounded-[3rem] overflow-hidden shadow-2xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 1.03 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="max-w-4xl mx-auto h-[60vh] rounded-[3rem] overflow-hidden shadow-2xl"
+          >
              <img src={event.image} alt="" aria-hidden="true" loading="lazy" decoding="async" className="w-full h-full object-cover" />
-          </div>
+          </motion.div>
         </div>
       </section>
 
 
       {/* CTA Final */}
-      <section className="py-32 px-8 bg-white text-center">
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="py-32 px-8 bg-white text-center"
+      >
         <div className="max-w-4xl mx-auto">
           <Sparkles className="text-[#7A3FF2] mx-auto mb-10" size={48} />
           <h2 className="text-5xl font-serif font-bold mb-10 tracking-tight">Sua próxima amizade pode começar aqui.</h2>
-          <button 
+          <button
             onClick={handleRegister}
             disabled={!registrationEnabled}
             className={`px-12 py-5 rounded-full font-bold text-xl transition-all shadow-2xl ${
-              registrationEnabled 
-                ? "bg-[#7A3FF2] text-white hover:bg-[#5E2CCF]" 
+              registrationEnabled
+                ? "bg-[#7A3FF2] text-white hover:bg-[#5E2CCF] active:scale-[0.97]"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
             }`}
           >
             {registrationEnabled ? "Quero Participar" : closedLabel}
           </button>
         </div>
-      </section>
+      </motion.section>
       </main>
     </div>
   );

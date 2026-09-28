@@ -32,8 +32,8 @@ function Experiencias() {
       <main id="conteudo">
       {/* Hero */}
       <section className="pt-40 pb-20 px-8 text-center">
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-serif font-bold mb-6 tracking-tight">Próximas Experiências</motion.h1>
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-xl text-[#5E5E5E] max-w-2xl mx-auto">
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="text-5xl md:text-7xl font-serif font-bold mb-6 tracking-tight">Próximas Experiências</motion.h1>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }} className="text-xl text-[#5E5E5E] max-w-2xl mx-auto">
           Cada encontro é uma oportunidade de conhecer pessoas, viver algo novo e criar conexões reais.
         </motion.p>
       </section>
@@ -49,11 +49,11 @@ function Experiencias() {
           {activeEvents.map((e, i) => (
             <motion.div 
               key={e.slug} 
-              initial={{ opacity: 0, y: 30 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -10 }} 
+              transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+              whileHover={{ y: -10 }}
               className="bg-white rounded-[2.5rem] overflow-hidden group shadow-sm hover:shadow-2xl transition-all border border-black/5"
             >
               <div className="h-72 overflow-hidden relative">
@@ -76,7 +76,7 @@ function Experiencias() {
                   <span className="text-sm font-bold text-[#5E5E5E]">{e.status === 'aberto' ? "Inscrições Abertas" : "Encerrado"}</span>
                   <Link 
                     to="/experiencias/$slug" params={{ slug: e.slug }} 
-                    className="flex items-center gap-2 px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] transition-all"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] active:scale-[0.96] transition-all"
                   >
                     Ver experiência <ArrowRight size={16} />
                   </Link>
