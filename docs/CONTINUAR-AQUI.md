@@ -1,6 +1,6 @@
 # Chega Mais BSB: onde paramos e o que falta
 
-Documento de passagem de bastão, escrito em 25/09/2026. Serve para você e para o Claude retomarem de outro computador sem perder contexto.
+Documento de passagem de bastão, escrito em 25/09/2026 e atualizado em 28/09/2026. Serve para você e para o Claude retomarem de outro computador sem perder contexto.
 
 > **Para o Claude que vai ler isto:** leia o documento inteiro antes de mexer em qualquer coisa. Confira o estado real com `git status` e `git log --oneline -6`, porque este texto pode estar desatualizado.
 
@@ -17,11 +17,11 @@ Site da comunidade feminina **Chega Mais BSB** (Brasília) para divulgar o proje
 
 ## 2. Estado atual do Git
 
-- Branch de trabalho: **`melhorias-seguranca-usabilidade`** (4 commits sobre o `main`, todos **locais, sem push**).
-- O `main` não foi alterado.
+- Branch de trabalho: **`melhorias-seguranca-usabilidade`**, já **enviado ao GitHub** (`git push` feito em 25/09). O `main` não foi alterado e não houve merge ainda.
 - Pasta no PC do trabalho: `C:\Dados\Desktop\Chega mais\chega-mais-bsb`.
 
 ```
+068d243 Docs: guia para continuar o trabalho (estado, feito e pendencias)
 142097b Fase 3: limpeza e documentacao
 0fc5819 Fase 2: usabilidade e acessibilidade
 3ff372e Fase 1: seguranca (Supabase, .env, dependencias e cabecalhos)
@@ -29,13 +29,7 @@ Site da comunidade feminina **Chega Mais BSB** (Brasília) para divulgar o proje
 599f959 Fix package lock   <- main
 ```
 
-**Para levar isto para o computador de casa** é preciso enviar o branch ao GitHub (ainda não foi feito). Não é o `main`, então não publica pelo Lovable, mas confirme que o Lovable está sincronizando só o `main`:
-
-```bash
-git push -u origin melhorias-seguranca-usabilidade
-```
-
-Em casa:
+Em qualquer computador novo:
 
 ```bash
 git clone https://github.com/mxverst1-rbr/chega-mais-bsb
@@ -91,6 +85,16 @@ Arquivo principal: `src/services/eventsService.ts`.
 - Removido `src/data/events.ts` (dados fixos sem uso).
 - README com as colunas da planilha, regras, cache, segurança e estrutura de pastas.
 
+### 28/09: build de produção testado e conferência visual (sem novo commit de código)
+- `npm run build` passa sem erros. O preset do Nitro é `cloudflare-module` (padrão do template Lovable, gera um Worker do Cloudflare) — não há `vercel.json` fixando outro alvo. Não deu para confirmar se é a causa do 404 na Vercel, mas é a pista mais concreta encontrada; ver item B.2.
+- Build testado de verdade rodando o Worker via `npx wrangler dev` (simula o ambiente Cloudflare) e navegando nas páginas pelo navegador embutido:
+  - Home, `/experiencias`, evento futuro, evento passado, 404 e versão mobile — tudo certo, sem bugs visuais.
+  - **Confirmado ao vivo:** em 28/09, o Clube do Livro (25/09) já sumiu das listas; só resta a Degustação & Conversas (05/10). A lógica de datas funciona na prática, não só na teoria.
+  - Placeholder de imagem aparecendo corretamente onde o link da planilha é inválido.
+  - "Inscrições em breve" (evento aberto sem `formUrl`) vs. "Inscrições Encerradas" (evento com data passada) — os dois estados distintos, como esperado.
+  - Navbar em mobile: esconde os links de texto, mantém logo + botão "Participar", sem estourar.
+- Isso fecha os antigos itens C.1 e C.2 (renumerados abaixo).
+
 ## 4. O que falta fazer
 
 ### A. Você precisa fazer (Google Sheets)
@@ -102,19 +106,16 @@ Arquivo principal: `src/services/eventsService.ts`.
 6. (Opcional) Um **Google Forms** que alimenta uma aba de rascunhos, para as meninas cadastrarem por formulário. Alguém revisa e copia para a aba pública.
 
 ### B. Depende de você decidir
-1. **Publicar as mudanças:** conferir o site no navegador (`npm run dev`, tela cheia e celular). Se estiver bom, fazer o merge de `melhorias-seguranca-usabilidade` no `main`. Isso publica pelo Lovable.
-2. **Descobrir a URL atual do site** na Vercel (o domínio antigo deu 404).
-3. Se preferir, testar antes com `npm run build` e `npm run preview`.
+1. **Publicar as mudanças:** o build e a conferência visual já foram feitos (seção 3). Se você concordar com o resultado, é só avisar que eu faço o merge de `melhorias-seguranca-usabilidade` no `main` — isso publica pelo Lovable.
+2. **Descobrir a URL atual do site.** O domínio antigo da Vercel (`chega-mais-bsb-mu.vercel.app`) dá 404. Verifique no painel da Vercel (ou do Cloudflare, se o deploy migrou para lá — o build gera um Worker do Cloudflare por padrão) qual é o domínio ativo hoje.
 
 ### C. Pendências técnicas (Claude pode fazer)
-1. **Testar o build de produção** (`npm run build`). Não foi rodado; só o `dev` foi testado. O target padrão do Nitro no template é Cloudflare, mas o site estava na Vercel, então vale confirmar como o deploy é feito.
-2. **Verificar visualmente** home, `/experiencias` e a página de evento em desktop e celular. Nada disso foi visto em tela, porque o navegador embutido recusou o `localhost`. O que foi checado: `tsc` sem erros, ESLint sem problemas reais e páginas respondendo 200 com o HTML esperado.
-3. **CSP completa.** Hoje só há uma CSP mínima. Uma política com `script-src`, `img-src` e `font-src` exige testar no navegador, porque o site usa Google Fonts, Fontshare, Drive e imagens de qualquer link `https` da planilha. Não colocar `frame-ancestors`/`X-Frame-Options` sem antes checar o preview do Lovable.
-4. **`bun.lock`:** ainda lista o Supabase e o `js-yaml` vulnerável. Para regenerar, precisa do `bun` instalado (`bun install`). A dependência vulnerável é só de desenvolvimento. Decidir se o projeto usa `bun` ou `npm` e manter só um lockfile.
-5. **Mais acessibilidade:** os cards de evento ainda não têm um landmark `<main>` nem "skip link". A página do evento repete a mesma imagem duas vezes.
-6. **Imagens restantes:** `ana_lu.jpg`, `hannah.jpg`, `clara.jpg` ficam em cerca de 180-240 KB. Dá para converter tudo para WebP.
-7. **Pasta `src/assets/*.asset.json`:** descritores do Lovable, sem uso no código. Remover só depois de confirmar que o editor do Lovable não precisa deles.
-8. **Cache em produção:** o cache de 60 s vive na memória do processo. Em ambiente serverless cada instância tem o seu, o que é aceitável, mas dá para trocar por cache HTTP (`Cache-Control`) se quiser.
+1. **CSP completa.** Hoje só há uma CSP mínima. Uma política com `script-src`, `img-src` e `font-src` exige testar no navegador, porque o site usa Google Fonts, Fontshare, Drive e imagens de qualquer link `https` da planilha. Não colocar `frame-ancestors`/`X-Frame-Options` sem antes checar o preview do Lovable.
+2. **`bun.lock`:** ainda lista o Supabase e o `js-yaml` vulnerável. Para regenerar, precisa do `bun` instalado (`bun install`). A dependência vulnerável é só de desenvolvimento. Decidir se o projeto usa `bun` ou `npm` e manter só um lockfile.
+3. **Mais acessibilidade:** os cards de evento ainda não têm um landmark `<main>` nem "skip link". A página do evento repete a mesma imagem duas vezes.
+4. **Imagens restantes:** `ana_lu.jpg`, `hannah.jpg`, `clara.jpg` ficam em cerca de 180-240 KB. Dá para converter tudo para WebP.
+5. **Pasta `src/assets/*.asset.json`:** descritores do Lovable, sem uso no código. Remover só depois de confirmar que o editor do Lovable não precisa deles.
+6. **Cache em produção:** o cache de 60 s vive na memória do processo. Em ambiente serverless cada instância tem o seu, o que é aceitável, mas dá para trocar por cache HTTP (`Cache-Control`) se quiser.
 
 ## 5. Cuidados e armadilhas
 
@@ -139,6 +140,6 @@ Depois de subir o dev, confira:
 - Um `slug` inexistente mostra "Experiência não encontrada". Uma rota inexistente mostra a 404 em português.
 - Resposta com cabeçalhos: `curl -sI http://localhost:8080/experiencias`.
 
-## 7. Prompt sugerido para colar no Claude em casa
+## 7. Prompt sugerido para colar no Claude em outro computador
 
-> Leia `docs/CONTINUAR-AQUI.md` neste repositório e confira o estado do Git. Estamos no branch `melhorias-seguranca-usabilidade`. Comece pelo item C.1 (rodar `npm run build` e conferir se passa) e depois me diga o que você recomenda fazer primeiro. Não faça push no `main`.
+> Leia `docs/CONTINUAR-AQUI.md` neste repositório e confira o estado do Git. Estamos no branch `melhorias-seguranca-usabilidade`, já publicado no GitHub. Me diga o que você recomenda fazer primeiro entre os itens da seção 4. Não faça push no `main` sem eu confirmar.
