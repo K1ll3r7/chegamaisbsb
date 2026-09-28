@@ -179,19 +179,23 @@ function Index() {
       <section className="py-32 px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-serif font-semibold text-center mb-20 tracking-tight">O que elas dizem</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
             {[
               { name: "Mariana", text: "O Chega Mais mudou minha percepção de Brasília. Encontrei mulheres incríveis que hoje são minhas melhores amigas." },
               { name: "Beatriz", text: "Eu tinha medo de ir sozinha, mas fui acolhida desde o primeiro minuto. É um ambiente realmente seguro e leve." },
-              { name: "Letícia", text: "Cada experiência é única. Não é apenas uma oficina, é um momento de reconexão comigo mesma e com as outras." }
+              { name: "Letícia", text: "Cada experiência é única. Não é apenas uma oficina, é um momento de reconexão comigo mesma e com as outras." },
+              { name: "Camila", text: "Cheguei sozinha na oficina de pintura sem saber o que esperar. Saí com o celular cheio de contatos novos e vontade de voltar no mês seguinte." },
+              { name: "Renata", text: "Sempre quis fazer yoga, mas nunca tive coragem de ir sozinha a lugar nenhum. No Chega Mais nem dá tempo de sentir isso, alguém já puxa assunto antes de você estender o tapete." },
+              { name: "Sofia", text: "Fiz aula de pole dance rindo de mim mesma o tempo inteiro, e ninguém ali estava julgando ninguém. Foi a primeira vez em muito tempo que me senti à vontade no meu próprio corpo." },
+              { name: "Gabriela", text: "O clube de leitura virou meu compromisso favorito do mês. Não é só sobre o livro, é sobre voltar pra casa com a cabeça cheia de conversas boas." }
             ].map((t, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
-                className="p-10 bg-[#FAF9F8] rounded-3xl relative group"
+                transition={{ duration: 0.5, ease: "easeOut", delay: (i % 3) * 0.1 }}
+                className="break-inside-avoid p-10 bg-[#FAF9F8] rounded-3xl relative group"
               >
                 <Quote className="absolute top-8 right-8 text-[#7A3FF2]/10" size={48} />
                 <div className="flex gap-1 mb-6 text-[#7A3FF2]">
