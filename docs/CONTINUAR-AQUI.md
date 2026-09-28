@@ -103,6 +103,13 @@ Arquivo principal: `src/services/eventsService.ts`.
 - **Achado importante para qualquer fórmula futura nesta planilha:** ela está no idioma **Português (Brasil)**, então o separador de argumentos em fórmulas é `;` (ponto e vírgula), não `,` (vírgula) — a vírgula é o separador decimal nesse idioma. Uma fórmula como `=OR(ISBLANK(I2),REGEXMATCH(...))` dá "Fórmula inválida" nessa planilha; o certo é `=OR(ISBLANK(I2);REGEXMATCH(...))`. Isso custou várias tentativas erradas (chegamos a suspeitar de aspas curvas e de auto-link do Sheets para "https://" — nenhuma das duas era a causa real). A fórmula final, para referência, está em `Dados > Validação de dados` no intervalo `I2:K200`.
 - Restam da lista A original: item 1 (preencher os links reais — só o Max tem essa informação) e item 5 (restringir quem edita — decisão do Max). Itens 3 e 4 (renumerados) estão feitos.
 
+### Fase 4: pendencias tecnicas (`1ef982f`)
+- **CSP completa**, testada de verdade no navegador (build de produção via `wrangler dev`, não só lida no código): `default-src 'self'`, `script-src` restrito + `'unsafe-inline'` só porque o TanStack Start injeta um script de hidratação cujo conteúdo muda por página (sem suporte a nonce nesta versão — risco baixo porque o React escapa tudo que vem da planilha), `style-src`/`font-src` liberando só `fonts.googleapis.com`/`fonts.gstatic.com`/`api.fontshare.com`/`cdn.fontshare.com`, `img-src` aceitando qualquer `https:` (a planilha aceita imagem de qualquer link). Sem erros de console em nenhuma rota testada.
+- **`bun.lock` removido.** Estava desatualizado (ainda listava o Supabase removido na Fase 1 e uma versão vulnerável do `js-yaml`). O projeto usa `npm`/`package-lock.json`; não há `bun` neste ambiente nem exigência documentada dele em lugar nenhum.
+- **Acessibilidade:** link "Pular para o conteúdo" (só aparece ao navegar por teclado) e `<main id="conteudo">` como landmark único em cada rota. A imagem repetida na página de evento (seção "Experiência Chega Mais") já tinha sido marcada como decorativa (`alt="" aria-hidden`) na Fase 2, então não precisou de nada novo ali.
+- **Imagens das fundadoras comprimidas** para o tamanho real de exibição (grade ~300px): `ana_lu.jpg` 238→80KB, `hannah.jpg` 195→68KB, `clara.jpg` 172→46KB.
+- Restam de C (renumerados abaixo): `src/assets/*.asset.json` (não removido, ver nota) e a decisão sobre cache HTTP em produção.
+
 ## 4. O que falta fazer
 
 ### A. Você precisa fazer (Google Sheets)
@@ -115,12 +122,10 @@ Arquivo principal: `src/services/eventsService.ts`.
 2. **Descobrir a URL atual do site.** O domínio antigo da Vercel (`chega-mais-bsb-mu.vercel.app`) dá 404. Verifique no painel da Vercel (ou do Cloudflare, se o deploy migrou para lá — o build gera um Worker do Cloudflare por padrão) qual é o domínio ativo hoje.
 
 ### C. Pendências técnicas (Claude pode fazer)
-1. **CSP completa.** Hoje só há uma CSP mínima. Uma política com `script-src`, `img-src` e `font-src` exige testar no navegador, porque o site usa Google Fonts, Fontshare, Drive e imagens de qualquer link `https` da planilha. Não colocar `frame-ancestors`/`X-Frame-Options` sem antes checar o preview do Lovable.
-2. **`bun.lock`:** ainda lista o Supabase e o `js-yaml` vulnerável. Para regenerar, precisa do `bun` instalado (`bun install`). A dependência vulnerável é só de desenvolvimento. Decidir se o projeto usa `bun` ou `npm` e manter só um lockfile.
-3. **Mais acessibilidade:** os cards de evento ainda não têm um landmark `<main>` nem "skip link". A página do evento repete a mesma imagem duas vezes.
-4. **Imagens restantes:** `ana_lu.jpg`, `hannah.jpg`, `clara.jpg` ficam em cerca de 180-240 KB. Dá para converter tudo para WebP.
-5. **Pasta `src/assets/*.asset.json`:** descritores do Lovable, sem uso no código. Remover só depois de confirmar que o editor do Lovable não precisa deles.
-6. **Cache em produção:** o cache de 60 s vive na memória do processo. Em ambiente serverless cada instância tem o seu, o que é aceitável, mas dá para trocar por cache HTTP (`Cache-Control`) se quiser.
+1. **Pasta `src/assets/*.asset.json`:** descritores do Lovable, sem uso no código (confirmado por busca — nada em `src` importa esses arquivos). Remover só depois de confirmar que o editor do Lovable não precisa deles; não removi por precaução, não por dificuldade técnica.
+2. **Cache em produção:** o cache de 60 s vive na memória do processo (`src/services/eventsService.ts`). Em ambiente serverless cada instância tem o seu, o que é aceitável, mas dá para trocar por cache HTTP (`Cache-Control`) se quiser. Não mexi nisso porque o valor certo depende de saber onde o site realmente roda (item B.2 ainda em aberto).
+3. **`X-Frame-Options`/`frame-ancestors`:** de propósito não adicionei, porque pode quebrar o preview do Lovable. Se um dia parar de usar o editor do Lovable, vale adicionar.
+4. Converter as fotos restantes (`brenda.jpg`, `community_group.jpg`, `group_portrait.jpg`, `group_smiling.jpg`, `workshop_table.jpg`) para WebP, se quiser espremer mais performance. Não é urgente — já foram comprimidas como JPEG nas Fases 2 e 4.
 
 ## 5. Cuidados e armadilhas
 
