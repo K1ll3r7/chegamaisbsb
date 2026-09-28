@@ -146,7 +146,7 @@ function Index() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl md:text-6xl font-serif font-semibold text-center mb-20 tracking-tight">Momentos Chega Mais</h2>
           <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-            {["workshop_table.jpg", "group_smiling.jpg", "group_portrait.jpg", "community_group.jpg", "workshop_table.jpg", "group_smiling.jpg"].map((imgName, i) => (
+            {["momento-pintura-grupo.jpg", "momento-yoga-barco.jpg", "momento-piquenique-parque.jpg", "momento-pole-dance.jpg", "momento-ecobags.jpg", "momento-pilates.jpg", "momento-clube-leitura.jpg", "momento-volei-praia.jpg"].map((imgName, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: "easeOut", delay: (i % 3) * 0.1 }} whileHover={{ scale: 1.02 }} className="break-inside-avoid relative group rounded-2xl overflow-hidden shadow-lg">
                 <img src={`/imagens/${imgName}`} alt="Momento de um encontro do Chega Mais" loading="lazy" decoding="async" className="w-full h-auto transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
