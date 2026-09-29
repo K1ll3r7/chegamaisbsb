@@ -43,7 +43,7 @@ export function Navbar() {
         </div>
 
         <Link
-          to="/experiencias"
+          to="/comunidade"
           className={`px-5 sm:px-6 py-2.5 rounded-full font-bold text-sm transition-all active:scale-95 ${
             isScrolled || !isTransparentPage
               ? "bg-[#7A3FF2] text-white hover:bg-[#5E2CCF]"

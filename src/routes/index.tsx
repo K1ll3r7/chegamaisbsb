@@ -69,7 +69,7 @@ function Index() {
             Você não precisa viver Brasília sozinha.
           </motion.h1>
           <motion.div variants={itemVariants} className="flex flex-col md:flex-row gap-6 justify-center">
-            <Link to="/experiencias" className="px-10 py-4 bg-[#7A3FF2] text-white rounded-full font-bold text-lg hover:bg-[#5E2CCF] active:scale-[0.97] transition-all text-center">Quero participar</Link>
+            <Link to="/comunidade" className="px-10 py-4 bg-[#7A3FF2] text-white rounded-full font-bold text-lg hover:bg-[#5E2CCF] active:scale-[0.97] transition-all text-center">Quero participar</Link>
             <Link to="/experiencias" className="px-10 py-4 border border-white/30 text-white rounded-full font-bold text-lg hover:bg-white/10 active:scale-[0.97] transition-all text-center">Conhecer experiências</Link>
           </motion.div>
         </motion.div>
@@ -351,7 +351,7 @@ function Index() {
           <h2 className="text-5xl md:text-8xl font-serif font-bold mb-10 tracking-tighter leading-[0.9]">Talvez sua próxima amizade esteja a uma inscrição de distância.</h2>
           <p className="text-xl md:text-2xl font-serif italic mb-16 text-[#5E5E5E]">Você não precisa chegar acompanhada.<br/>Você só precisa chegar.</p>
           <div className="flex flex-col md:flex-row gap-6 justify-center">
-            <Link to="/experiencias" className="px-12 py-5 bg-[#7A3FF2] text-white rounded-full font-bold text-xl hover:bg-[#5E2CCF] active:scale-[0.97] transition-all shadow-2xl text-center">Quero participar</Link>
+            <Link to="/comunidade" className="px-12 py-5 bg-[#7A3FF2] text-white rounded-full font-bold text-xl hover:bg-[#5E2CCF] active:scale-[0.97] transition-all shadow-2xl text-center">Quero participar</Link>
             <Link to="/experiencias" className="px-12 py-5 border border-black/10 rounded-full font-bold text-xl hover:bg-black/5 active:scale-[0.97] transition-all text-center">Conhecer experiências</Link>
           </div>
         </motion.div>
