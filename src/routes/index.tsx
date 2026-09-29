@@ -1,7 +1,7 @@
 import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, type Variants } from "framer-motion";
-import { Sparkles, Heart, Users, Calendar, ArrowRight, Star, Quote, MapPin, Coffee, Camera, ChevronRight, Check } from "lucide-react";
+import { Sparkles, Heart, Users, Calendar, ArrowRight, Star, Quote, MapPin, Coffee, Camera, ChevronRight, Check, Tag } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { getActiveEvents, type SheetEvent as Event } from "@/services/eventsService";
@@ -304,9 +304,10 @@ function Index() {
                   </div>
                 </div>
                 <div className="p-10">
-                  <div className="flex gap-4 text-xs font-bold text-[#5E5E5E] mb-6 uppercase tracking-widest">
-                    <span className="flex items-center gap-1"><Calendar size={14} /> {e.date}</span>
-                    <span className="flex items-center gap-1"><MapPin size={14} /> {e.location}</span>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs font-bold text-[#5E5E5E] mb-6 uppercase tracking-widest">
+                    <span className="flex items-center gap-1 whitespace-nowrap"><Calendar size={14} /> {e.date}</span>
+                    <span className="flex items-center gap-1 whitespace-nowrap"><MapPin size={14} /> {e.location}</span>
+                    {e.price && <span className="flex items-center gap-1 whitespace-nowrap text-[#7A3FF2]"><Tag size={14} /> {e.price}</span>}
                   </div>
                   <h3 className="text-3xl font-serif font-bold mb-4">{e.title}</h3>
                   <div className="flex justify-between items-center mt-10">

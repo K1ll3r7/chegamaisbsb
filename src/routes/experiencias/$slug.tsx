@@ -125,10 +125,20 @@ function ExperienciaIndividual() {
             <h2 className="text-3xl font-serif text-[#1A1A1A] mb-6">Sobre a experiência</h2>
             <p className="leading-relaxed text-xl text-[#1A1A1A] mb-12">{event.description}</p>
             
-            {event.spots && (
-              <div className="bg-white p-12 rounded-[2.5rem] border border-black/5 mb-20">
-                <h3 className="text-2xl font-serif font-bold mb-8 italic">Vagas</h3>
-                <p className="text-[#1A1A1A] text-lg">{spotsLabel}</p>
+            {(event.price || event.spots) && (
+              <div className="bg-white p-12 rounded-[2.5rem] border border-black/5 mb-20 grid sm:grid-cols-2 gap-10">
+                {event.price && (
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold mb-4 italic">Investimento</h3>
+                    <p className="text-[#1A1A1A] text-lg">{event.price}</p>
+                  </div>
+                )}
+                {event.spots && (
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold mb-4 italic">Vagas</h3>
+                    <p className="text-[#1A1A1A] text-lg">{spotsLabel}</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -174,6 +184,9 @@ function ExperienciaIndividual() {
                     <div className="h-48 overflow-hidden relative">
                       <img src={o.image} alt={o.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                       <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold uppercase text-[#7A3FF2] tracking-widest">{o.category}</div>
+                      {o.price && (
+                        <div className="absolute top-4 right-4 px-3 py-1 bg-[#7A3FF2] text-white rounded-full text-xs font-bold">{o.price}</div>
+                      )}
                     </div>
                     <div className="p-6">
                       <span className="flex items-center gap-1 text-xs font-bold text-[#5E5E5E] mb-3 uppercase tracking-widest"><Calendar size={12} /> {o.date}</span>

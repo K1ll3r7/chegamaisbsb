@@ -17,6 +17,7 @@ export interface SheetEvent {
   shortDescription: string;
   description: string;
   spots: string;
+  price: string;
 }
 
 // URL da planilha publicada como CSV
@@ -62,7 +63,7 @@ function formatImageUrl(value: unknown): string {
 }
 
 // Linha bruta do CSV: todas as colunas chegam como texto e podem faltar
-type SheetRow = Partial<Record<"slug" | "featured" | "status" | "title" | "category" | "date" | "time" | "location" | "mapsUrl" | "formUrl" | "image" | "shortDescription" | "description" | "spots" | "publicar", string>>;
+type SheetRow = Partial<Record<"slug" | "featured" | "status" | "title" | "category" | "date" | "time" | "location" | "mapsUrl" | "formUrl" | "image" | "shortDescription" | "description" | "spots" | "price" | "publicar", string>>;
 
 function parseCsv(csvText: string): SheetEvent[] {
   const results = Papa.parse<SheetRow>(csvText, {
@@ -110,6 +111,7 @@ function parseCsv(csvText: string): SheetEvent[] {
       shortDescription: (row.shortDescription ?? "").trim(),
       description: (row.description ?? "").trim(),
       spots: (row.spots ?? "").trim(),
+      price: (row.price ?? "").trim(),
     });
   }
 
