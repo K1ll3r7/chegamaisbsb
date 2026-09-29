@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, type Variants } from "framer-motion";
 import { Sparkles, Heart, Users, Calendar, ArrowRight, Star, Quote, MapPin, Coffee, Camera, ChevronRight, Check } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { getActiveEvents, type SheetEvent as Event } from "@/services/eventsService";
 
 
@@ -356,13 +357,7 @@ function Index() {
       </section>
       </main>
 
-      <footer className="py-20 bg-[#FAF9F8] text-center border-t border-black/5">
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <img src="/imagens/logo_purple.jpg" alt="Logo do Chega Mais BSB" width={40} height={40} loading="lazy" decoding="async" className="w-10 h-10 rounded-full" />
-          <span className="font-serif text-xl font-bold">Chega Mais BSB</span>
-        </div>
-        <p className="text-[#5E5E5E] text-sm font-medium">© 2026 • Feito com amor em Brasília</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

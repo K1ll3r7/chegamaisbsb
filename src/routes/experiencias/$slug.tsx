@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { getEventBySlug, getUpcomingEvents, type SheetEvent as Event } from "@/services/eventsService";
 import { Calendar, MapPin, Check, Camera, ArrowRight, Sparkles, HelpCircle, ChevronDown } from "lucide-react";
 
@@ -48,6 +49,7 @@ function ExperienciaIndividual() {
             Voltar para experiências
           </Link>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -211,6 +213,8 @@ function ExperienciaIndividual() {
         </div>
       </motion.section>
       </main>
+
+      <Footer />
     </div>
   );
 }

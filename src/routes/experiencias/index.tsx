@@ -1,6 +1,7 @@
 import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { getUpcomingEvents, type SheetEvent as Event } from "@/services/eventsService";
 
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
@@ -87,6 +88,8 @@ function Experiencias() {
         </div>
       </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
