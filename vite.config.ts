@@ -12,4 +12,11 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Sem isso, o preset da Vercel detecta a versao do Node da maquina que roda o build
+  // (ex: nodejs24.x) em vez de uma versao com suporte garantido na Vercel.
+  // `as any`: a tipagem do wrapper so expoe preset/output/cloudflare de proposito
+  // (opcao "vercel" nao é tipada, mas o Nitro aceita normalmente em tempo de execucao).
+  nitro: {
+    vercel: { functions: { runtime: "nodejs22.x" } },
+  } as any,
 });
