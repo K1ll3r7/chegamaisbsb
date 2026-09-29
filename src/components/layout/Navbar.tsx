@@ -39,6 +39,7 @@ export function Navbar() {
         <div className={`hidden sm:flex items-center gap-8 font-bold text-sm uppercase tracking-widest ${textColor}`}>
           <Link to="/" className="hover:text-[#7A3FF2] transition-colors">Sobre</Link>
           <Link to="/experiencias" className="hover:text-[#7A3FF2] transition-colors">Experiências</Link>
+          <Link to="/comunidade" className="hover:text-[#7A3FF2] transition-colors">Comunidade</Link>
         </div>
 
         <Link
