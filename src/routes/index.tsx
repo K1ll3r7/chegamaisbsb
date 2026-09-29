@@ -175,13 +175,37 @@ function Index() {
         </div>
       </section>
 
-      {/* Depoimentos Carousel Style */}
+      {/* Depoimentos */}
       <section className="py-32 px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-serif font-semibold text-center mb-20 tracking-tight">O que elas dizem</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-serif font-semibold mb-4 tracking-tight">O que elas dizem</h2>
+            <p className="text-lg text-[#5E5E5E] max-w-xl mx-auto">Histórias de quem topou chegar sozinha e saiu com companhia pra vida.</p>
+          </div>
+
+          {/* Depoimento em destaque */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative bg-[#F5F0FF] rounded-[2.5rem] p-12 md:p-16 mb-8 overflow-hidden"
+          >
+            <Quote className="absolute -top-6 -right-6 text-[#7A3FF2]/10" size={180} />
+            <div className="relative flex gap-1 mb-6 text-[#7A3FF2]">
+              {[...Array(5)].map((_, idx) => <Star key={idx} size={18} fill="currentColor" />)}
+            </div>
+            <p className="relative text-2xl md:text-3xl font-serif italic leading-snug mb-10 max-w-3xl">
+              "O Chega Mais mudou minha percepção de Brasília. Encontrei mulheres incríveis que hoje são minhas melhores amigas."
+            </p>
+            <div className="relative flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#7A3FF2] to-[#5E2CCF] text-white rounded-full flex items-center justify-center font-bold text-lg ring-4 ring-white">M</div>
+              <span className="font-bold text-lg">Mariana</span>
+            </div>
+          </motion.div>
+
           <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
             {[
-              { name: "Mariana", text: "O Chega Mais mudou minha percepção de Brasília. Encontrei mulheres incríveis que hoje são minhas melhores amigas." },
               { name: "Beatriz", text: "Eu tinha medo de ir sozinha, mas fui acolhida desde o primeiro minuto. É um ambiente realmente seguro e leve." },
               { name: "Letícia", text: "Cada experiência é única. Não é apenas uma oficina, é um momento de reconexão comigo mesma e com as outras." },
               { name: "Camila", text: "Cheguei sozinha na oficina de pintura sem saber o que esperar. Saí com o celular cheio de contatos novos e vontade de voltar no mês seguinte." },
@@ -195,15 +219,15 @@ function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, ease: "easeOut", delay: (i % 3) * 0.1 }}
-                className="break-inside-avoid p-10 bg-[#FAF9F8] rounded-3xl relative group"
+                className="break-inside-avoid p-10 bg-[#FAF9F8] rounded-3xl relative group hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
               >
-                <Quote className="absolute top-8 right-8 text-[#7A3FF2]/10" size={48} />
+                <Quote className="absolute top-8 right-8 text-[#7A3FF2]/10 group-hover:text-[#7A3FF2]/25 transition-colors duration-300" size={48} />
                 <div className="flex gap-1 mb-6 text-[#7A3FF2]">
                   {[...Array(5)].map((_, idx) => <Star key={idx} size={16} fill="currentColor" />)}
                 </div>
                 <p className="text-lg italic mb-8">"{t.text}"</p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-[#7A3FF2] text-white rounded-full flex items-center justify-center font-bold">{t.name[0]}</div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#7A3FF2] to-[#5E2CCF] text-white rounded-full flex items-center justify-center font-bold">{t.name[0]}</div>
                   <span className="font-bold">{t.name}</span>
                 </div>
               </motion.div>
@@ -286,10 +310,10 @@ function Index() {
                   <h3 className="text-3xl font-serif font-bold mb-4">{e.title}</h3>
                   <div className="flex justify-between items-center mt-10">
                     <span className="text-sm font-bold text-[#5E5E5E]">
-                      {e.status === 'aberto' ? "Participar" : "Inscrições Encerradas"}
+                      Inscrições Abertas
                     </span>
                     <Link to="/experiencias/$slug" params={{ slug: e.slug }} className="px-6 py-3 bg-[#7A3FF2] text-white rounded-full font-bold text-sm hover:bg-[#5E2CCF] active:scale-[0.96] transition-all">
-                      {e.status === 'aberto' ? "Participar" : "Ver Detalhes"}
+                      Participar
                     </Link>
                   </div>
                 </div>
